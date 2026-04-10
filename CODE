@@ -1,0 +1,71 @@
+import random
+
+# Puzzle dictionary (clue : answer)
+puzzles = {
+    "King of jungle": "lion",
+    "Used for coding language": "python",
+    "Red fruit often mistaken as vegetable": "tomato",
+    "Fastest land animal": "cheetah",
+    "Device to call people": "phone",
+    "Opposite of cold": "hot"
+}
+
+# Select random puzzle
+clue, word = random.choice(list(puzzles.items()))
+
+guessed_letters = []
+wrong_guesses = 0
+max_parts = 5   # ONLY 5 tries
+
+# 5-stage stick man
+stages = [
+    "",                           # 0
+    "  O  ",                      # 1 head
+    "  O  \n  |  ",               # 2 body
+    "  O  \n /|\\ ",              # 3 arms
+    "  O  \n /|\\ \n / ",         # 4 one leg
+    "  O  \n /|\\ \n / \\ "       # 5 full (game over)
+]
+
+# Display guessed word
+def display_word():
+    display = ""
+    for letter in word:
+        if letter in guessed_letters:
+            display += letter + " "
+        else:
+            display += "_ "
+    return display
+
+print("🎮 Hangman Puzzle Game (5 Tries Only)")
+print("🧩 Clue:", clue)
+
+# Game loop
+while wrong_guesses < max_parts:
+    print("\nWord:", display_word())
+    print("\n", stages[wrong_guesses])
+
+    guess = input("Guess a letter: ").lower()
+
+    if guess in guessed_letters:
+        print("⚠️ Already guessed!")
+        continue
+
+    guessed_letters.append(guess)
+
+    if guess in word:
+        print("✅ Correct!")
+    else:
+        print("❌ Wrong!")
+        wrong_guesses += 1
+
+    # Win check
+    if all(letter in guessed_letters for letter in word):
+        print("\n🎉 You Won! The word was:", word)
+        break
+
+# Lose condition
+if wrong_guesses == max_parts:
+    print("\n💀 Game Over!")
+    print(stages[wrong_guesses])
+    print("The word was:", word)
